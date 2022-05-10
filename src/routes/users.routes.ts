@@ -5,17 +5,31 @@ import { CreateUserService } from "../modules/users/services/CreateUserService";
 const usersRoutes = Router();
 const usersRepository = new UsersRepository();
 
-usersRoutes.post("/", (request, response) => {
-    const { name, celular, cep, produto, email } = request.body;
+usersRoutes.post("/name", (request, response) => {
+    const { name } = request.body;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.execute({ name, celular, cep, produto, email });
+    createUserService.executeName({ name });
 
     return response.status(201).send();
 });
+
+usersRoutes.post("/celular/:id", (request, response) => {
+    const { celular } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeCelular({ celular, id });
+
+    return response.status(201).send();
+});
+
 
 usersRoutes.get("/", (request, response) => {
     const all = usersRepository.list();

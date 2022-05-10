@@ -1,26 +1,31 @@
+import { User } from "../model/user";
 import { IUsersRepository } from "../repositories/IUsersRepository";
 
-
-interface IRequest {
-    name: string;
-    celular: string;
-    cep: string;
-    produto: string;
-    email: string;
-}
 
 class CreateUserService {
     constructor(private usersRepository: IUsersRepository) {}
 
-    execute({ name, celular, cep, produto, email }: IRequest): void {
-        const UserAlreadyExists = this.usersRepository.findByName(name);
+    executeName({ name }): void {
+        // const UserAlreadyExists = this.usersRepository.findByName(name);
 
-        if(UserAlreadyExists) {
-            throw new Error("Usuário já existe")
-        }
+        // if(UserAlreadyExists) {
+        //     throw new Error("Nome já existe")
+        // }
 
-        this.usersRepository.create({ name, celular, cep, produto, email });
+        this.usersRepository.createName( { name } );
     }
+
+    executeCelular({ celular, id }): void {
+        // const UserAlreadyExists = this.usersRepository.findByName(name);
+
+        // if(UserAlreadyExists) {
+        //     throw new Error("Nome já existe")
+        // }
+        
+
+        this.usersRepository.createCelular( { celular, id } );
+    }
+
 }
 
 export { CreateUserService };

@@ -1,9 +1,17 @@
+import { v4 as uuidV4 } from "uuid";
 class User {
-    name!: string;
-    celular!: string;
-    cep!: string;
-    produto!: string;
-    email!: string;
+    id?: string;
+    name: string;
+    celular: string;
+    cep: string;
+    produto: string;
+    email: string;
+
+    constructor() {
+        if (!this.id) {
+            this.id = uuidV4();
+        }
+    }
 }
 
 export { User };

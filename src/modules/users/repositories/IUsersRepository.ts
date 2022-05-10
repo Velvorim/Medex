@@ -1,8 +1,7 @@
 import { User } from "../model/user";
 
-
-
 interface ICreateUserDTO {
+    id: string;
     name: string;
     celular: string;
     cep: string;
@@ -11,9 +10,11 @@ interface ICreateUserDTO {
 }
 
 interface IUsersRepository {
-    findByName(name: string): User;
+    // findByName(name: string): User;
     list(): User[];
-    create({ name, celular, cep, produto, email }: ICreateUserDTO): void;
+    createName({ name }): void;
+    createCelular({ celular, id }): void;
+
 }
 
-export { IUsersRepository, ICreateUserDTO };
+export { IUsersRepository, ICreateUserDTO};
