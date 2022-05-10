@@ -7,38 +7,31 @@
     "email": "meuemail@gmail.com"
   },
   {
+    "name": "Maria Antonieta",
+    "celular": 17996517077,
+    "cep": "15500-000",
+    "produto": "Naprix 5mg",
+    "email": "meuemail@gmail.com"
+  },
+  {
     "name": "teste2",
     "celular": 17996517077,
     "cep": "15500-000",
-    "produto": "Rivotril",
+    "produto": "Naprix 5mg",
+    "email": "meuemail@gmail.com"
+  },
+  {
+    "name": "teste3",
+    "celular": 17996517077,
+    "cep": "15500-000",
+    "produto": "Naprix 5mg",
     "email": "meuemail@gmail.com"
   },
   {
     "name": "Giovana",
     "celular": 17996517077,
     "cep": "15500-000",
-    "produto": "Dorflex",
-    "email": "meuemail@gmail.com"
-  },
-  {
-    "name": "Ana",
-    "celular": 17996517077,
-    "cep": "15500-000",
-    "produto": "Eno Guarana",
-    "email": "meuemail@gmail.com"
-  },
-  {
-    "name": "Gabrielli",
-    "celular": 17996517077,
-    "cep": "15500-000",
-    "produto": "Amoeba",
-    "email": "meuemail@gmail.com"
-  },
-  {
-    "name": "Maria Antonieta",
-    "celular": 17996517077,
-    "cep": "15500-000",
-    "produto": "Naprix 5mg",
+    "produto": "Enxalax",
     "email": "meuemail@gmail.com"
   }
 ]
