@@ -30,6 +30,44 @@ usersRoutes.post("/celular/:id", (request, response) => {
     return response.status(201).send();
 });
 
+usersRoutes.post("/cep/:id", (request, response) => {
+    const { cep } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeCep({ cep, id });
+
+    return response.status(201).send();
+});
+
+usersRoutes.post("/produto/:id", (request, response) => {
+    const { produto } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeProduto({ produto, id });
+
+    return response.status(201).send();
+});
+
+usersRoutes.post("/email/:id", (request, response) => {
+    const { email } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeEmail({ email, id });
+
+    return response.status(201).send();
+});
 
 usersRoutes.get("/", (request, response) => {
     const all = usersRepository.list();

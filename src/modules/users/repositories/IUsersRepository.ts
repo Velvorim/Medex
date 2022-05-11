@@ -10,10 +10,14 @@ interface ICreateUserDTO {
 }
 
 interface IUsersRepository {
-    // findByName(name: string): User;
+    findByName(name: string): User;
+    findByData(data: string): User;
     list(): User[];
     createName({ name }): void;
     createCelular({ celular, id }): void;
+    createCep({ cep, id }): void;
+    createProduto({ produto, id }): void;
+    createEmail({ email, id }): void;
 
 }
 
