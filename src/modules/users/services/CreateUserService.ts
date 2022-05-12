@@ -1,5 +1,7 @@
 
+import createError from "http-errors";
 import { IUsersRepository } from "../repositories/IUsersRepository";
+
 
 
 class CreateUserService {
@@ -9,24 +11,35 @@ class CreateUserService {
         const UserAlreadyExists = this.usersRepository.findByName(name);
 
         if(UserAlreadyExists) {
-            throw new Error("Nome já existe")
+            throw createError(400,"Nome já existe")
         }
 
         this.usersRepository.createName( { name } );
     }
 
-    executeCelular({ celular, id }): void {
-        const UserAlreadyExists = this.usersRepository.findByData(celular);
+    executeSms({ number, id }): void {
+        // const UserAlreadyExists = this.usersRepository.findByData(sms);
 
-        if(UserAlreadyExists) {
-            throw new Error("Celular já existe")
-        }
+        // if(UserAlreadyExists) {
+        //     throw new Error("Sms já existe")
+        // }
         
 
-        this.usersRepository.createCelular( { celular, id } );
+        this.usersRepository.createSms( { number, id } );
     }
 
-    executeCep({ cep, id }): void {
+    executeSmsMessage({ code, status, verified, id }): void {
+        // const UserAlreadyExists = this.usersRepository.findByData(sms);
+
+        // if(UserAlreadyExists) {
+        //     throw new Error("Sms já existe")
+        // }
+        
+
+        this.usersRepository.createSmsMessage( { code, status, verified, id } );
+    }
+
+    executeLocale({ cep, id }): void {
         const UserAlreadyExists = this.usersRepository.findByData(cep);
 
         if(UserAlreadyExists) {
@@ -34,7 +47,7 @@ class CreateUserService {
         }
         
 
-        this.usersRepository.createCep( { cep, id } );
+        this.usersRepository.createLocale( { cep, id } );
     }
 
     executeProduto({ produto, id }): void {

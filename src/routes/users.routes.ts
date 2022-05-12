@@ -17,20 +17,33 @@ usersRoutes.post("/name", (request, response) => {
     return response.status(201).send();
 });
 
-usersRoutes.post("/celular/:id", (request, response) => {
-    const { celular } = request.body;
+usersRoutes.post("/:id/sms", (request, response) => {
+    const { number } = request.body;
     const { id } = request.params;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.executeCelular({ celular, id });
+    createUserService.executeSms({ number, id });
 
     return response.status(201).send();
 });
 
-usersRoutes.post("/cep/:id", (request, response) => {
+usersRoutes.post("/:id/sms/mensagem", (request, response) => {
+    const { code, status, verified } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeSmsMessage({  code, status, verified, id });
+
+    return response.status(201).send();
+});
+
+usersRoutes.post("/:id/cep", (request, response) => {
     const { cep } = request.body;
     const { id } = request.params;
 
@@ -38,7 +51,7 @@ usersRoutes.post("/cep/:id", (request, response) => {
         usersRepository,
     );
 
-    createUserService.executeCep({ cep, id });
+    createUserService.executeLocale({ cep, id });
 
     return response.status(201).send();
 });

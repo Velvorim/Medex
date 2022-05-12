@@ -27,9 +27,14 @@ class UserRepositoryInMemory implements IUsersRepository {
 
         this.users.push(user);
     }
-    createCelular({ celular, id }: { celular: any; id: any; }): void {
+    createSms({ number, id }: { number: any; id: any; }): void {
         throw new Error("Method not implemented.");
     }
+
+    createSmsMessage({ code, status, verified, id }: { code: any; status: any; verified: any; id: any; }){
+        throw new Error("Method not implemented.");
+    }
+
     createCep({ cep, id }: { cep: any; id: any; }): void {
         throw new Error("Method not implemented.");
     }
