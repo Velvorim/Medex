@@ -20,10 +20,14 @@ class UsersRepository implements IUsersRepository {
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
-
+        const produto = "";
         Object.assign(user, {
             name,
+            produto,
             created_at: new Date(),
+            sms: {},
+            locale: {},
+            email:{},
         });
 
 
@@ -220,14 +224,19 @@ class UsersRepository implements IUsersRepository {
 
 
 
-    findByData(data: string) {
+    findByData(data, id) {
         const users = fs.readFileSync(banco, 'utf-8');
 
         let user = JSON.parse(users);
 
         const userExists = user.find(
-            (user) => (user.celular === data || user.cep === data || user.produto === data || user.email === data)
+            (user) =>  user.id === id
         );
+
+        if(userExists.sms.number === data || userExists.email.value === data || userExists.locale.zip_code === data ||
+             userExists.produto === data){
+            return false;
+        }
 
         return userExists;
 

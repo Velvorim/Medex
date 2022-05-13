@@ -39,7 +39,7 @@ interface ICreateEmailDTO {
 
 interface IUsersRepository {
     findByName(name: string): User;
-    // findByData(data: string): User;
+    findByData(data, id): User;
     list(): User[];
     createName({ name }): void;
     createSms({ number, id  }): void;
