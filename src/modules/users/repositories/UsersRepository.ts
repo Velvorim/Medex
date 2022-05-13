@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Locale } from "../model/locale";
 import { isEmpty } from "lodash";
 import createHttpError from "http-errors";
+import { Email } from "../model/email";
 
 
 const banco = __dirname + '/BancoJson.json';
@@ -125,9 +126,9 @@ class UsersRepository implements IUsersRepository {
                     });
                 }
             } catch (err) {
-                console.error(err)
+                console.error(err);
             }
-            throw createHttpError(400, 'CEP inválido')
+            throw createHttpError(400, 'CEP inválido');
         }
 
         getAddress(cep)
@@ -154,14 +155,42 @@ class UsersRepository implements IUsersRepository {
 
     }
 
-    createEmail({ email, id }: ICreateUserDTO): void {
-
+    createEmail({ value, id }): void {
+        const email = new Email();
+        Object.assign(email, {
+            value,
+            created_at: new Date(),
+        });
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
         findUserId.email = email
+
+        userData.map(function (email) {
+            return findUserId
+        });
+
+        fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
+            if (err) throw err;
+        });
+
+    }
+
+    createEmailCode({ code, verified, id }): void {
+        const email = new Email();
+        Object.assign(email, {
+            code,
+            verified,
+        });
+        const usersBanco = fs.readFileSync(banco, 'utf-8');
+
+        let userData = JSON.parse(usersBanco);
+
+        const findUserId = userData.find(user => user.id === id);
+        findUserId.email.code = email.code;
+        findUserId.email.verified = email.verified;
 
         userData.map(function (email) {
             return findUserId
@@ -187,8 +216,9 @@ class UsersRepository implements IUsersRepository {
         );
 
         return userExists;
-
     }
+
+
 
     findByData(data: string) {
         const users = fs.readFileSync(banco, 'utf-8');

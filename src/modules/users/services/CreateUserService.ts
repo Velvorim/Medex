@@ -11,17 +11,17 @@ class CreateUserService {
         const UserAlreadyExists = this.usersRepository.findByName(name);
 
         if(UserAlreadyExists) {
-            throw createError(400,"Nome já existe")
+            throw createError(400,"Nome já existe");
         }
 
         this.usersRepository.createName( { name } );
     }
 
     executeSms({ number, id }): void {
-        // const UserAlreadyExists = this.usersRepository.findByData(sms);
+        // const UserAlreadyExists = this.usersRepository.findByData(number);
 
-        // if(UserAlreadyExists) {
-        //     throw new Error("Sms já existe")
+        // if(!UserAlreadyExists) {
+        //     throw new Error("Telefone já cadastrado");
         // }
         
 
@@ -29,7 +29,7 @@ class CreateUserService {
     }
 
     executeSmsMessage({ code, status, verified, id }): void {
-        // const UserAlreadyExists = this.usersRepository.findByData(sms);
+        // const UserAlreadyExists = this.usersRepository.findByData(code);
 
         // if(UserAlreadyExists) {
         //     throw new Error("Sms já existe")
@@ -40,36 +40,46 @@ class CreateUserService {
     }
 
     executeLocale({ cep, id }): void {
-        const UserAlreadyExists = this.usersRepository.findByData(cep);
+        // const UserAlreadyExists = this.usersRepository.findByData(cep);
 
-        if(UserAlreadyExists) {
-            throw new Error("Cep já existe")
-        }
+        // if(UserAlreadyExists) {
+        //     throw new Error("Cep já existe");
+        // }
         
 
         this.usersRepository.createLocale( { cep, id } );
     }
 
     executeProduto({ produto, id }): void {
-        const UserAlreadyExists = this.usersRepository.findByData(produto);
+        // const UserAlreadyExists = this.usersRepository.findByData(produto);
 
-        if(UserAlreadyExists) {
-            throw new Error("Produto já existe")
-        }
+        // if(UserAlreadyExists) {
+        //     throw new Error("Produto já existe");
+        // }
         
 
         this.usersRepository.createProduto( { produto, id } );
     }
 
-    executeEmail({ email, id }): void {
-        const UserAlreadyExists = this.usersRepository.findByData(email);
+    executeEmail({ value, id }): void {
+        // const UserAlreadyExists = this.usersRepository.findByData(value);
 
-        if(UserAlreadyExists) {
-            throw new Error("Email já existe")
-        }
+        // if(UserAlreadyExists) {
+        //     throw new Error("Email já existe");
+        // }
+
+        this.usersRepository.createEmail( { value, id } );
+    }
+
+    executeEmailCode({ code, verified, id }): void {
+        // const UserAlreadyExists = this.usersRepository.findByData(code);
+
+        // if(UserAlreadyExists) {
+        //     throw new Error("Sms já existe")
+        // }
         
 
-        this.usersRepository.createEmail( { email, id } );
+        this.usersRepository.createEmailCode( { code, verified, id } );
     }
 
 }

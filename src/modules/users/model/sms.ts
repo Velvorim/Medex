@@ -2,6 +2,7 @@ import { v4 as uuidV4 } from "uuid";
 
 class Sms {
 
+
         id?: string;
         code: string;
         status: string;

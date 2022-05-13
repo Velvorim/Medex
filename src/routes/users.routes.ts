@@ -56,7 +56,7 @@ usersRoutes.post("/:id/cep", (request, response) => {
     return response.status(201).send();
 });
 
-usersRoutes.post("/produto/:id", (request, response) => {
+usersRoutes.post("/:id/produto", (request, response) => {
     const { produto } = request.body;
     const { id } = request.params;
 
@@ -69,15 +69,29 @@ usersRoutes.post("/produto/:id", (request, response) => {
     return response.status(201).send();
 });
 
-usersRoutes.post("/email/:id", (request, response) => {
-    const { email } = request.body;
+usersRoutes.post("/:id/email", (request, response) => {
+    const { value } = request.body;
     const { id } = request.params;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.executeEmail({ email, id });
+    createUserService.executeEmail({ value, id });
+
+    return response.status(201).send();
+});
+
+
+usersRoutes.post("/:id/email/code", (request, response) => {
+    const { code, verified } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeEmailCode({ code, verified, id });
 
     return response.status(201).send();
 });
