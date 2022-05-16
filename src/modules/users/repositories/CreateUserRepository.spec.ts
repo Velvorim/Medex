@@ -14,7 +14,7 @@ const expected = {
 jest.mock("./UsersRepository", () => {
     return { // need to add this nested `default` property
         UsersRepository: jest.fn().mockImplementation(() => {
-            return {
+        return {
                 createName: jest.fn().mockImplementation(() => {
                 return{
                     "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
@@ -26,22 +26,55 @@ jest.mock("./UsersRepository", () => {
                     "email": {}
             }
         }),
-                findByName: jest.fn()
-            }   
-        }) 
+        
+        findByName: jest.fn().mockImplementation(() => {
+            return{
+                    "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
+                    "name": "Cuca Beludo",
+                    "produto": "",
+                    "created_at": "2022-05-16T13:51:57.682Z",
+                    "sms": {},
+                    "locale": {},
+                    "email": {}
+                }
+            })
+         }   
+      }) 
     }
 });
 
 test("Etapa 1 - Cadastro com sucesso", async () => {
     const sut = new UsersRepository;
     const event = { 
-        name: "Cuca Beludo",
+        name: "Valor",
     }
     
-    const user =  sut.createName(event);
+    const user = await sut.createName(event);
+    console.log(user);
     expect(user.id).toEqual(expected.id);
     
 });
+
+test("deve ser possivél procurar o usuario pelo nome", async () => {
+    const sut = new UsersRepository;
+    const event = { 
+        name: "Valor",
+    }
+
+    const user = await sut.findByName(event as any);
+    expect(user).toEqual(expected);
+});
+
+// test("Etapa 2 - Usuário com status inválido", async () => {
+//     const sut = new UsersRepository;
+//     const event = { 
+//         id: "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
+//         telefone: "+5517996517077"
+//     }
+
+//     const user = await sut.createSms(event as any);
+//     expect(user.id).toEqual(expected.id);
+// });
 
 
 

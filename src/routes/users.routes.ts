@@ -12,9 +12,9 @@ usersRoutes.post("/name", (request, response) => {
         usersRepository,
     );
 
-    createUserService.executeName({ name });
+    const user = createUserService.executeName({ name });
 
-    return response.status(201).send();
+    return response.status(201).send({ user });
 });
 
 usersRoutes.post("/:id/sms", (request, response) => {

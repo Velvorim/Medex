@@ -26,10 +26,10 @@ class UsersRepository implements IUsersRepository {
             id: uuidV4(),
             name,
             produto,
-            created_at: new Date(),
             sms: {},
             locale: {},
             email:{},
+            created_at: new Date(),
         });
 
 
@@ -64,6 +64,8 @@ class UsersRepository implements IUsersRepository {
             if (err) throw err;
         });
 
+        
+
     }
 
     createSmsMessage({ code, status, verified, id }): void {
@@ -73,6 +75,7 @@ class UsersRepository implements IUsersRepository {
             status,
             verified,
         });
+
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);

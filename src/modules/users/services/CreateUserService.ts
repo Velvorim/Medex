@@ -1,5 +1,6 @@
 
 import createError from "http-errors";
+import { User } from "../model/user";
 import { IUsersRepository } from "../repositories/IUsersRepository";
 
 
@@ -7,14 +8,16 @@ import { IUsersRepository } from "../repositories/IUsersRepository";
 class CreateUserService {
     constructor(private usersRepository: IUsersRepository) {}
 
-    executeName({ name }): void {
+    executeName({ name }): User {
         const UserAlreadyExists = this.usersRepository.findByName(name);
 
         if(UserAlreadyExists) {
             throw createError(400,"Nome já existe");
         }
 
-        this.usersRepository.createName( { name } );
+       const user = this.usersRepository.createName( { name } );
+
+       return user;
     }
 
     executeSms({ number, id }): void {
@@ -26,6 +29,7 @@ class CreateUserService {
         
 
         this.usersRepository.createSms( { number, id } );
+
     }
 
     executeSmsMessage({ code, status, verified, id }): void {
