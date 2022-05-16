@@ -41,7 +41,7 @@ interface IUsersRepository {
     findByName(name: string): User;
     findByData(data, id): User;
     list(): User[];
-    createName({ name }): void;
+    createName({ name }): User;
     createSms({ number, id  }): void;
     createSmsMessage({ code, status, verified, id }): void;
     createLocale({ cep, id }): void;

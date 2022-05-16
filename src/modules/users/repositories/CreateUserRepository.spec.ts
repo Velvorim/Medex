@@ -1,55 +1,47 @@
 
-// import { CreateUserService } from "../services/CreateUserService";
 import { UsersRepository } from "./UsersRepository";
 
+const expected = { 
+    "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
+    "name": "Cuca Beludo",
+    "produto": "",
+    "created_at": "2022-05-16T13:51:57.682Z",
+    "sms": {},
+    "locale": {},
+    "email": {}
+   };
 
-const expected = { name: "Cuca Beludo", id: '12345' };
-
-// jest.mock("./UsersRepository", () => {
-//     return { // need to add this nested `default` property
-//         UsersRepository: jest.fn().mockImplementation(() => {
-//             return {
-//                 createName: jest.fn().mockImplementation(() => {return{ name: "Beijamin Arola", id: "1234"}}),
-//                 findByName: jest.fn()
-//             }   
-//         }) 
-//     }
-// });
-
-jest.mock("./UsersRepository")
-jest.mock("./BancoJSon", () => {
-    return {
-        expected
+jest.mock("./UsersRepository", () => {
+    return { // need to add this nested `default` property
+        UsersRepository: jest.fn().mockImplementation(() => {
+            return {
+                createName: jest.fn().mockImplementation(() => {
+                return{
+                    "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
+                    "name": "Cuca Beludo",
+                    "produto": "",
+                    "created_at": "2022-05-16T13:51:57.682Z",
+                    "sms": {},
+                    "locale": {},
+                    "email": {}
+            }
+        }),
+                findByName: jest.fn()
+            }   
+        }) 
     }
 });
-    
-
-// const userRepositoryMock: jest.Mocked<UsersRepository> = {
-//     createName: jest.fn()
-// };
-
-// const sutFactory = () => {
-//     const createUserMock = new userRepositoryMock() as jest.Mocked<UsersRepository>;
-
-//     const sut = new CreateUserService(createUserMock);
-
-//     return {
-//         sut,
-//         createUserMock,
-//     }
-// }
 
 test("Etapa 1 - Cadastro com sucesso", async () => {
     const sut = new UsersRepository;
-    await sut.createName({name: "valor"});
-    // const event = { 
-    //     name: "Cuca Beludo",
-    // }
+    const event = { 
+        name: "Cuca Beludo",
+    }
     
-    //const user = createUserMock.createName(event);
-   expect(sut.createName).toHaveBeenCalledTimes(1);
+    const user =  sut.createName(event);
+    expect(user.id).toEqual(expected.id);
+    
 });
-
 
 
 

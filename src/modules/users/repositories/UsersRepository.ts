@@ -15,7 +15,7 @@ const banco = __dirname + '/BancoJson.json';
 
 class UsersRepository implements IUsersRepository {
 
-    createName({ name }): void {
+    createName({ name }): User {
         const user = new User();
 
         const usersBanco = fs.readFileSync(banco, 'utf-8');
@@ -39,6 +39,8 @@ class UsersRepository implements IUsersRepository {
         fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
             if (err) throw err;
         });
+
+        return user;
     }
 
     createSms({ number, id }): void {
