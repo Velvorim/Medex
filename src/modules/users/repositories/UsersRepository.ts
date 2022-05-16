@@ -8,13 +8,14 @@ import { Locale } from "../model/locale";
 import { isEmpty } from "lodash";
 import createHttpError from "http-errors";
 import { Email } from "../model/email";
+import { v4 as uuidV4 } from "uuid";
 
 
 const banco = __dirname + '/BancoJson.json';
 
 class UsersRepository implements IUsersRepository {
 
-    createName({ name }: ICreateUserDTO): void {
+    createName({ name }): void {
         const user = new User();
 
         const usersBanco = fs.readFileSync(banco, 'utf-8');
@@ -22,6 +23,7 @@ class UsersRepository implements IUsersRepository {
         let userData = JSON.parse(usersBanco);
         const produto = "";
         Object.assign(user, {
+            id: uuidV4(),
             name,
             produto,
             created_at: new Date(),
@@ -37,7 +39,6 @@ class UsersRepository implements IUsersRepository {
         fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
             if (err) throw err;
         });
-
     }
 
     createSms({ number, id }): void {
