@@ -43,11 +43,12 @@ interface IUsersRepository {
     list(): User[];
     createName({ name }): User;
     createSms({ number, id  }): void;
-    createSmsMessage({ code, status, verified, id }): void;
+    createSmsMessage({ code, id }): void;
     createLocale({ cep, id }): void;
     createProduto({ produto, id }): void;
     createEmail({ value, id }): void;
-    createEmailCode({ code, verified, id }): void;
+    createEmailCode({ code, id }): void;
+    createSenha({ senha, id }): void;
 
 }
 

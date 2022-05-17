@@ -1,6 +1,7 @@
 
 import { ICreateUserDTO, IUsersRepository } from "./IUsersRepository";
 import * as fs from 'fs';
+import * as crypto from 'crypto';
 import { User } from "../model/user";
 import { Sms } from "../model/sms";
 import axios from 'axios';
@@ -22,13 +23,15 @@ class UsersRepository implements IUsersRepository {
 
         let userData = JSON.parse(usersBanco);
         const produto = "";
+        const senha = "";
         Object.assign(user, {
             id: uuidV4(),
             name,
             produto,
             sms: {},
             locale: {},
-            email:{},
+            email: {},
+            senha,
             created_at: new Date(),
         });
 
@@ -45,10 +48,23 @@ class UsersRepository implements IUsersRepository {
 
     createSms({ number, id }): void {
         const smss = new Sms();
+
+        var i, arr = [];
+        for (i = 0; i < 5; i++) {
+            arr[i] = Math.floor(Math.random() * 9 + 1);
+        }
+        const code = arr.join("");
+
+        const verified = false;
+
         Object.assign(smss, {
+            code,
             number,
+            status: "Pendente",
+            verified,
             created_at: new Date(),
         });
+
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
@@ -64,35 +80,42 @@ class UsersRepository implements IUsersRepository {
             if (err) throw err;
         });
 
-        
-
     }
 
-    createSmsMessage({ code, status, verified, id }): void {
-        const smss = new Sms();
-        Object.assign(smss, {
-            code,
-            status,
-            verified,
-        });
+    createSmsMessage({ code, id }): void {
+     
 
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
-        findUserId.sms.code = smss.code;
-        findUserId.sms.status = smss.status;
-        findUserId.sms.verified = smss.verified;
+       
+        if(findUserId.sms.code === code){
 
-        userData.map(function (cell) {
-            return findUserId
-        });
+            const verified = true;
 
-        fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
-            if (err) throw err;
-        });
+            const smss = new Sms();
+            Object.assign(smss, {
+                code,
+                status: "Autorizado",
+                verified,
+            });
 
+            findUserId.sms.code = smss.code;
+            findUserId.sms.status = smss.status;
+            findUserId.sms.verified = smss.verified;
+
+            userData.map(function (cell) {
+                return findUserId
+            });
+    
+            fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
+                if (err) throw err;
+            });
+        }else{
+            throw new Error("Código de sms invalido");
+        }
     }
 
 
@@ -166,9 +189,17 @@ class UsersRepository implements IUsersRepository {
     }
 
     createEmail({ value, id }): void {
+        var i, arr = [];
+        for (i = 0; i < 5; i++) {
+            arr[i] = Math.floor(Math.random() * 9 + 1);
+        }
+        const code = arr.join("");
+
         const email = new Email();
         Object.assign(email, {
             value,
+            code,
+            verified: false,
             created_at: new Date(),
         });
         const usersBanco = fs.readFileSync(banco, 'utf-8');
@@ -188,31 +219,65 @@ class UsersRepository implements IUsersRepository {
 
     }
 
-    createEmailCode({ code, verified, id }): void {
+    createEmailCode({ code, id }): void {
+
         const email = new Email();
-        Object.assign(email, {
-            code,
-            verified,
-        });
+
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
-        findUserId.email.code = email.code;
-        findUserId.email.verified = email.verified;
+       
+        if(findUserId.email.code === code){
 
-        userData.map(function (email) {
+            Object.assign(email, {
+                code,
+                verified: true,
+            });
+
+            findUserId.email.code = email.code;
+            findUserId.email.verified = email.verified;
+    
+            userData.map(function (email) {
+                return findUserId
+            });
+    
+            fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
+                if (err) throw err;
+            });
+
+        }else{
+            throw new Error("Código de Email invalido");
+        }
+    }
+
+    createSenha({senha, id}): void{
+
+        const alg = "aes-256-ctr";
+        const key = crypto.randomBytes(32);
+        const iv = crypto.randomBytes(16);
+
+        const cipher = crypto.createCipheriv(alg,Buffer.from(key),iv);
+        let crypted = cipher.update(senha);
+
+        crypted = Buffer.concat([crypted, cipher.final()]);
+
+        const usersBanco = fs.readFileSync(banco, 'utf-8');
+
+        let userData = JSON.parse(usersBanco);
+
+        const findUserId = userData.find(user => user.id === id);
+        findUserId.senha = crypted.toString('hex');
+
+        userData.map(function (cell) {
             return findUserId
         });
 
         fs.writeFile(banco, JSON.stringify(userData, null, 2), function (err) {
             if (err) throw err;
         });
-
     }
-
-
 
 
 
@@ -236,17 +301,18 @@ class UsersRepository implements IUsersRepository {
         let user = JSON.parse(users);
 
         const userExists = user.find(
-            (user) =>  user.id === id
+            (user) => user.id === id
         );
 
-        if(userExists.sms.number === data || userExists.email.value === data || userExists.locale.zip_code === data ||
-             userExists.produto === data){
+        if (userExists.sms.number === data || userExists.email.value === data || userExists.locale.zip_code === data ||
+            userExists.produto === data) {
             return false;
         }
 
         return userExists;
 
     }
+    
 
     list() {
 

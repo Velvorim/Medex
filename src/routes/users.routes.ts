@@ -31,14 +31,14 @@ usersRoutes.post("/:id/sms", (request, response) => {
 });
 
 usersRoutes.post("/:id/sms/mensagem", (request, response) => {
-    const { code, status, verified } = request.body;
+    const { code } = request.body;
     const { id } = request.params;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.executeSmsMessage({  code, status, verified, id });
+    createUserService.executeSmsMessage({  code, id });
 
     return response.status(201).send();
 });
@@ -84,14 +84,27 @@ usersRoutes.post("/:id/email", (request, response) => {
 
 
 usersRoutes.post("/:id/email/code", (request, response) => {
-    const { code, verified } = request.body;
+    const { code } = request.body;
     const { id } = request.params;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.executeEmailCode({ code, verified, id });
+    createUserService.executeEmailCode({ code, id });
+
+    return response.status(201).send();
+});
+
+usersRoutes.post("/:id/senha", (request, response) => {
+    const { senha } = request.body;
+    const { id } = request.params;
+
+    const createUserService = new CreateUserService(
+        usersRepository,
+    );
+
+    createUserService.executeSenha({ senha, id });
 
     return response.status(201).send();
 });

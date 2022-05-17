@@ -9,6 +9,7 @@ class User {
     locale: Locale;
     produto: string;
     email: string;
+    senha: string;
 }
 
 export { User };

@@ -8,16 +8,16 @@ import { IUsersRepository } from "../repositories/IUsersRepository";
 class CreateUserService {
     constructor(private usersRepository: IUsersRepository) {}
 
-    executeName({ name }): User {
+    executeName({ name }) {
         const UserAlreadyExists = this.usersRepository.findByName(name);
 
         if(UserAlreadyExists) {
             throw createError(400,"Nome já existe");
         }
 
-       const user = this.usersRepository.createName( { name } );
+       const { id } = this.usersRepository.createName( { name } );
 
-       return user;
+       return id;
     }
 
     executeSms({ number, id }): void {
@@ -32,8 +32,8 @@ class CreateUserService {
 
     }
 
-    executeSmsMessage({ code, status, verified, id }): void {
-        this.usersRepository.createSmsMessage( { code, status, verified, id } );
+    executeSmsMessage({ code, id }): void {
+        this.usersRepository.createSmsMessage( { code, id } );
     }
 
     executeLocale({ cep, id }): void {
@@ -68,8 +68,18 @@ class CreateUserService {
         this.usersRepository.createEmail( { value, id } );
     }
 
-    executeEmailCode({ code, verified, id }): void {
-        this.usersRepository.createEmailCode( { code, verified, id } );
+    executeEmailCode({ code, id }): void {
+        this.usersRepository.createEmailCode( { code, id } );
+    }
+
+    executeSenha({ senha, id }): void {
+        const UserAlreadyExists = this.usersRepository.findByData(senha, id);
+
+        if(!UserAlreadyExists) {
+            throw new Error("Senha já criada");
+        }
+
+        this.usersRepository.createSenha( { senha, id } );
     }
 
 }
