@@ -47,15 +47,15 @@ class CreateUserService {
         this.usersRepository.createLocale( { cep, id } );
     }
 
-    executeProduto({ produto, id }): void {
-        const UserAlreadyExists = this.usersRepository.findByData(produto, id);
+    executeProduto({ name, quantidade, id }): void {
+        const UserAlreadyExists = this.usersRepository.findByData(name, id);
 
         if(!UserAlreadyExists) {
             throw new Error("Produto já existe");
         }
         
 
-        this.usersRepository.createProduto( { produto, id } );
+        this.usersRepository.createProduto( { name, quantidade, id } );
     }
 
     executeEmail({ value, id }): void {

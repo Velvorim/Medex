@@ -10,6 +10,7 @@ import { isEmpty } from "lodash";
 import createHttpError from "http-errors";
 import { Email } from "../model/email";
 import { v4 as uuidV4 } from "uuid";
+import { Produto } from "../model/produto";
 
 
 const banco = __dirname + '/BancoJson.json';
@@ -22,12 +23,11 @@ class UsersRepository implements IUsersRepository {
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
-        const produto = "";
         const senha = "";
         Object.assign(user, {
             id: uuidV4(),
             name,
-            produto,
+            produto: {},
             sms: {},
             locale: {},
             email: {},
@@ -169,14 +169,23 @@ class UsersRepository implements IUsersRepository {
     }
 
 
-    createProduto({ produto, id }: ICreateUserDTO): void {
+    createProduto({ name, quantidade, id }): void {
+
+        const produto = new Produto();
+
+        Object.assign(produto, { 
+            name,
+            quantidade
+        });
 
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
-        findUserId.produto = produto
+        findUserId.produto.name = produto.name;
+        findUserId.produto.quantidade = produto.quantidade;
+
 
         userData.map(function (produto) {
             return findUserId

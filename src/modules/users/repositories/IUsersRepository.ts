@@ -1,6 +1,7 @@
 
 import { Email } from "../model/email";
 import { Locale } from "../model/locale";
+import { Produto } from "../model/produto";
 import { Sms } from "../model/sms";
 import { User } from "../model/user";
 
@@ -9,7 +10,7 @@ interface ICreateUserDTO {
     name: string;
     sms: Sms;
     locale: Locale;
-    produto: string;
+    produto: Produto;
     email: Email;
 
 }
@@ -36,6 +37,11 @@ interface ICreateEmailDTO {
     value: string;
 }
 
+interface ICreateProdutolDTO {
+    name: string;
+    quantidade: number;
+}
+
 
 interface IUsersRepository {
     findByName(name: string): User;
@@ -45,11 +51,11 @@ interface IUsersRepository {
     createSms({ number, id  }): void;
     createSmsMessage({ code, id }): void;
     createLocale({ cep, id }): void;
-    createProduto({ produto, id }): void;
+    createProduto({ name, quantidade, id }): void;
     createEmail({ value, id }): void;
     createEmailCode({ code, id }): void;
     createSenha({ senha, id }): void;
 
 }
 
-export { IUsersRepository, ICreateUserDTO, ICreateSmsDTO, ICreateLocaleDTO,  ICreateEmailDTO};
+export { IUsersRepository, ICreateUserDTO, ICreateSmsDTO, ICreateLocaleDTO,  ICreateEmailDTO, ICreateProdutolDTO };

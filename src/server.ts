@@ -10,3 +10,5 @@ app.use(express.json());
 app.use("/users", usersRoutes);
 
 app.listen(3333, () => console.log("Server is running!"));
+
+export { app };

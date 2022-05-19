@@ -1,5 +1,5 @@
 
-import { UsersRepository } from "./UsersRepository";
+import { requestName } from "./users.routes";
 
 const expected = { 
     "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
@@ -11,14 +11,14 @@ const expected = {
     "email": {}
    };
 
-jest.mock("./UsersRepository", () => {
-    return { // need to add this nested `default` property
-        UsersRepository: jest.fn().mockImplementation(() => {
+jest.mock("../modules/users/services/CreateUserService", () => {
+    return { 
+        CreateUserService: jest.fn().mockImplementation(() => {
         return {
-                createName: jest.fn().mockImplementation(() => {
+                executeName: jest.fn().mockImplementation(() => {
                 return{
                     "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
-                    "name": "Cuca Beludo",
+                    "name": "Treobaldo",
                     "produto": "",
                     "created_at": "2022-05-16T13:51:57.682Z",
                     "sms": {},
@@ -27,43 +27,68 @@ jest.mock("./UsersRepository", () => {
             }
         }),
         
-        findByName: jest.fn().mockImplementation(() => {
-            return{
-                    "id": "e9bd655c-3f2a-418f-96eb-6f37da7ab126",
-                    "name": "Cuca Beludo",
-                    "produto": "",
-                    "created_at": "2022-05-16T13:51:57.682Z",
-                    "sms": {},
-                    "locale": {},
-                    "email": {}
-                }
-            })
+        findByName: jest.fn(),
+
          }   
       }) 
     }
 });
 
-test("Etapa 1 - Cadastro com sucesso", async () => {
-    const sut = new UsersRepository;
-    const event = { 
-        name: "Valor",
+
+test("Deve ser possivél criar um usuário", async () => {
+    const request = {
+        body: {
+            name: "Treobaldo"   
+        }
     }
-    
-    const user = await sut.createName(event);
-    console.log(user);
+    const response = {
+        status: function(code) {
+            return {
+                send: function(obj) {
+                  return {
+                    status: code,
+                     user: obj
+                    
+                  }
+                }
+            }
+         }
+    }
+
+  const {user , status} = await requestName(request, response);
+  console.log(user)
     expect(user.id).toEqual(expected.id);
+    expect(status).toBe(201);
+});
+
+
+
+
+
+
+
+// test("Etapa 1 - Cadastro com sucesso", async () => {
+//     const sut = new UsersRepository;
+//     const event = { 
+//         name: "Valor",
+//     }
     
-});
+//     const user = await sut.createName(event);
+//     expect(user.id).toEqual(expected.id);
+    
+// });
 
-test("deve ser possivél procurar o usuario pelo nome", async () => {
-    const sut = new UsersRepository;
-    const event = { 
-        name: "Valor",
-    }
+// test("deve ser possivél procurar o usuario pelo nome", async () => {
+//     const sut = new UsersRepository;
+//     const event = { 
+//         name: "Valor",
+//     }
 
-    const user = await sut.findByName(event as any);
-    expect(user).toEqual(expected);
-});
+//     const user = await sut.findByName(event as any);
+//     expect(user).toEqual(expected);
+// });
+// const usersRepository = new UsersRepository();
+// const createService = new CreateUserService(usersRepository);
 
 // test("Etapa 2 - Usuário com status inválido", async () => {
 //     const sut = new UsersRepository;
@@ -94,7 +119,7 @@ test("deve ser possivél procurar o usuario pelo nome", async () => {
 
 //     it("Deve ser possível criar um nome para o usuário", async () => {
 //         const user = {
-//             name: "Teste Turbando"
+//             name: "Teste"
 //         }
 
 //         await createUser.executeName({
@@ -110,7 +135,7 @@ test("deve ser possivél procurar o usuario pelo nome", async () => {
         
 //         expect(async () => {
 //             const user = {
-//                 name: "Teste Turbando"
+//                 name: "Teste"W
 //             }
     
 //             await createUser.executeName({

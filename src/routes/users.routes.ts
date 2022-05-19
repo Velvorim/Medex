@@ -5,19 +5,23 @@ import { CreateUserService } from "../modules/users/services/CreateUserService";
 const usersRoutes = Router();
 const usersRepository = new UsersRepository();
 
-usersRoutes.post("/name", (request, response) => {
+const requestName = async (request, response) => {
     const { name } = request.body;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    const user = createUserService.executeName({ name });
+ 
+    const user = await createUserService.executeName({ name });
+    
 
-    return response.status(201).send({ user });
-});
+    return  response.status(201).send(user);
+}
 
-usersRoutes.post("/:id/sms", (request, response) => {
+usersRoutes.post("/name", requestName);
+
+const requestSms = async (request, response) => {
     const { number } = request.body;
     const { id } = request.params;
 
@@ -28,7 +32,9 @@ usersRoutes.post("/:id/sms", (request, response) => {
     createUserService.executeSms({ number, id });
 
     return response.status(201).send();
-});
+};
+
+usersRoutes.post("/:id/sms", requestSms);
 
 usersRoutes.post("/:id/sms/mensagem", (request, response) => {
     const { code } = request.body;
@@ -38,7 +44,7 @@ usersRoutes.post("/:id/sms/mensagem", (request, response) => {
         usersRepository,
     );
 
-    createUserService.executeSmsMessage({  code, id });
+    createUserService.executeSmsMessage({ code, id });
 
     return response.status(201).send();
 });
@@ -57,14 +63,14 @@ usersRoutes.post("/:id/cep", (request, response) => {
 });
 
 usersRoutes.post("/:id/produto", (request, response) => {
-    const { produto } = request.body;
+    const { name, quantidade } = request.body;
     const { id } = request.params;
 
     const createUserService = new CreateUserService(
         usersRepository,
     );
 
-    createUserService.executeProduto({ produto, id });
+    createUserService.executeProduto({ name, quantidade, id });
 
     return response.status(201).send();
 });
@@ -115,4 +121,4 @@ usersRoutes.get("/", (request, response) => {
     return response.json(all);
 });
 
-export { usersRoutes };
+export { usersRoutes, requestName, requestSms };
