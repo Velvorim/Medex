@@ -2,6 +2,7 @@
 import { Locale } from "./locale";
 import { Sms } from "./sms";
 
+
 class User {
     id?: string;
     name: string;
@@ -10,6 +11,7 @@ class User {
     produto: string;
     email: string;
     senha: string;
+
 }
 
 export { User };

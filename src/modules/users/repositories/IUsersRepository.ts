@@ -49,11 +49,11 @@ interface IUsersRepository {
     list(): User[];
     createName({ name }): User;
     createSms({ number, id  }): void;
-    createSmsMessage({ code, id }): void;
+    sendSmsMessage({ code, id }): void;
     createLocale({ cep, id }): void;
     createProduto({ name, quantidade, id }): void;
     createEmail({ value, id }): void;
-    createEmailCode({ code, id }): void;
+    sendEmailCode({ code, id }): void;
     createSenha({ senha, id }): void;
 
 }

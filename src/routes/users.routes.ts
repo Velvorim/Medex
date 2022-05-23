@@ -1,9 +1,12 @@
 import { Router } from "express";
+import { LoginRepository } from "../modules/users/repositories/LoginRepository";
 import { UsersRepository } from "../modules/users/repositories/UsersRepository";
 import { CreateUserService } from "../modules/users/services/CreateUserService";
+import { LoginService } from "../modules/users/services/LoginService";
 
 const usersRoutes = Router();
 const usersRepository = new UsersRepository();
+const loginRepository = new LoginRepository();
 
 const requestName = async (request, response) => {
     const { name } = request.body;
@@ -119,6 +122,17 @@ usersRoutes.get("/", (request, response) => {
     const all = usersRepository.list();
 
     return response.json(all);
+});
+
+usersRoutes.get("/login", (request, response) => {
+    const { username, password } = request.body;
+
+   const login = new LoginService(loginRepository);
+
+   login.executeLogin(username, password);
+
+   return response.status(200).send();
+
 });
 
 export { usersRoutes, requestName, requestSms };

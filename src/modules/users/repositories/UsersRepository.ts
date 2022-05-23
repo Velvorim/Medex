@@ -1,5 +1,5 @@
 
-import { ICreateUserDTO, IUsersRepository } from "./IUsersRepository";
+import { IUsersRepository } from "./IUsersRepository";
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { User } from "../model/user";
@@ -11,6 +11,8 @@ import createHttpError from "http-errors";
 import { Email } from "../model/email";
 import { v4 as uuidV4 } from "uuid";
 import { Produto } from "../model/produto";
+import { DateTime } from "luxon";
+
 
 
 const banco = __dirname + '/BancoJson.json';
@@ -82,7 +84,7 @@ class UsersRepository implements IUsersRepository {
 
     }
 
-    createSmsMessage({ code, id }): void {
+    sendSmsMessage({ code, id }): void {
      
 
         const usersBanco = fs.readFileSync(banco, 'utf-8');
@@ -91,7 +93,7 @@ class UsersRepository implements IUsersRepository {
 
         const findUserId = userData.find(user => user.id === id);
        
-        if(findUserId.sms.code === code){
+        if(findUserId.sms.code === code && findUserId.sms.verified === false){
 
             const verified = true;
 
@@ -114,7 +116,7 @@ class UsersRepository implements IUsersRepository {
                 if (err) throw err;
             });
         }else{
-            throw new Error("Código de sms invalido");
+            throw new Error("Código de sms invalido ou já verificado");
         }
     }
 
@@ -178,11 +180,14 @@ class UsersRepository implements IUsersRepository {
             quantidade
         });
 
+
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
+
+
         findUserId.produto.name = produto.name;
         findUserId.produto.quantidade = produto.quantidade;
 
@@ -203,14 +208,18 @@ class UsersRepository implements IUsersRepository {
             arr[i] = Math.floor(Math.random() * 9 + 1);
         }
         const code = arr.join("");
-
+        
+        
         const email = new Email();
         Object.assign(email, {
             value,
             code,
             verified: false,
             created_at: new Date(),
+            expires_at: DateTime.utc().plus({ minutes: 15 }).toISO()
         });
+
+    
         const usersBanco = fs.readFileSync(banco, 'utf-8');
 
         let userData = JSON.parse(usersBanco);
@@ -228,7 +237,18 @@ class UsersRepository implements IUsersRepository {
 
     }
 
-    createEmailCode({ code, id }): void {
+    
+
+    sendEmailCode({ code, id }): void {
+
+        const verifyExpiration = (target, maxMinutesUntilInvalid) => {
+            const now = DateTime.utc()
+            const max = DateTime.fromISO(target)
+            const diff = now.diff(max, [ 'minutes' ])
+        
+            if (diff.minutes > maxMinutesUntilInvalid)
+                throw new Error("Código de verificação expirado")
+        }
 
         const email = new Email();
 
@@ -238,13 +258,17 @@ class UsersRepository implements IUsersRepository {
 
         const findUserId = userData.find(user => user.id === id);
        
-        if(findUserId.email.code === code){
 
+        
+        if(findUserId.email.code === code && findUserId.email.verified === false){
+            
+            verifyExpiration(findUserId.email.expires_at, 15);
             Object.assign(email, {
                 code,
                 verified: true,
             });
 
+    
             findUserId.email.code = email.code;
             findUserId.email.verified = email.verified;
     
@@ -264,20 +288,19 @@ class UsersRepository implements IUsersRepository {
     createSenha({senha, id}): void{
 
         const alg = "aes-256-ctr";
-        const key = crypto.randomBytes(32);
-        const iv = crypto.randomBytes(16);
+        const key = "12345678958769321457871587458741";
+        const iv = "1234567891123456";
 
-        const cipher = crypto.createCipheriv(alg,Buffer.from(key),iv);
-        let crypted = cipher.update(senha);
+        let cipher = crypto.createCipheriv(alg,key,iv);
+        let encrypted = cipher.update(senha, "utf-8", "hex");
+        encrypted += cipher.final("hex")
 
-        crypted = Buffer.concat([crypted, cipher.final()]);
-
-        const usersBanco = fs.readFileSync(banco, 'utf-8');
+        const usersBanco = fs.readFileSync(banco, "utf-8");
 
         let userData = JSON.parse(usersBanco);
 
         const findUserId = userData.find(user => user.id === id);
-        findUserId.senha = crypted.toString('hex');
+        findUserId.senha = encrypted.toString();
 
         userData.map(function (cell) {
             return findUserId
@@ -317,6 +340,7 @@ class UsersRepository implements IUsersRepository {
             userExists.produto === data) {
             return false;
         }
+        
 
         return userExists;
 

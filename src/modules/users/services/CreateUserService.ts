@@ -33,7 +33,7 @@ class CreateUserService {
     }
 
     executeSmsMessage({ code, id }): void {
-        this.usersRepository.createSmsMessage( { code, id } );
+        this.usersRepository.sendSmsMessage( { code, id } );
     }
 
     executeLocale({ cep, id }): void {
@@ -69,7 +69,7 @@ class CreateUserService {
     }
 
     executeEmailCode({ code, id }): void {
-        this.usersRepository.createEmailCode( { code, id } );
+        this.usersRepository.sendEmailCode( { code, id } );
     }
 
     executeSenha({ senha, id }): void {

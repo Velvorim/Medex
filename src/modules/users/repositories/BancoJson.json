@@ -1,33 +1,18 @@
 [
   {
-    "id": "01dd223e-e5c9-4dd9-9e82-2468d84ceddd",
-    "name": "Treobaldo",
-    "produto": {
-      "name": "Naprix",
-      "quantidade": 1
-    },
-    "sms": {
-      "id": "c75ab55d-0fd7-4eba-9df9-5cbb5403f2dd",
-      "code": "66137",
-      "number": "+5517996517077",
-      "status": "Autorizado",
-      "verified": true,
-      "created_at": "2022-05-18T19:57:33.415Z"
-    },
-    "locale": {
-      "zip_code": "15502-060",
-      "address": "Rua Ponta Porã",
-      "neighborhood": "San Remo",
-      "city": "Votuporanga",
-      "state": "SP"
-    },
+    "id": "98b6f13a-35db-4e2d-b214-dc3c95abc44a",
+    "name": "Raylucaria",
+    "produto": {},
+    "sms": {},
+    "locale": {},
     "email": {
-      "value": "meu@email.com",
-      "code": "78528",
-      "verified": true,
-      "created_at": "2022-05-18T19:59:24.922Z"
+      "value": "meu2@email.com",
+      "code": "88799",
+      "verified": false,
+      "created_at": "2022-05-20T04:50:51.619Z",
+      "expires_at": "2022-05-20T04:51:51.635Z"
     },
-    "senha": "4d0fbee92e2833fd14ca8faa28e17364",
-    "created_at": "2022-05-18T19:55:53.368Z"
+    "created_at": "2022-05-20T04:47:23.573Z",
+    "senha": "8fc6122d9231d870577767043c0f19e2"
   }
 ]
